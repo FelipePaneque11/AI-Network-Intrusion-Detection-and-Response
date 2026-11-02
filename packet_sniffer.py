@@ -1,11 +1,3 @@
-import os
-
-# Set a writable cache directory for Scapy on Windows
-if os.name == "nt":
-    os.environ["XDG_CACHE_HOME"] = os.path.join(
-        os.environ["LOCALAPPDATA"], "ScapyCache"
-    )
-
 import scapy.all as scapy
 from datetime import datetime, timezone
 
@@ -84,12 +76,13 @@ def process_packets(packet):
     print(f"Packet {counter},\n {packets[counter]} \n")
 
 
-def sniff(interface):
+def sniff():
     scapy.sniff(
-        iface=interface,
         store=False,
         prn=process_packets
     )
 
+#show selected interface
+print("Selected network interface: " + scapy.conf.iface.name)
 #start capturing packets
-sniff("Wi-Fi")
+sniff()
