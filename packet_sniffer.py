@@ -47,8 +47,7 @@ def process_packets(packet):
         protocol = "TCP"
         source_port = packet[scapy.TCP].sport
         destination_port = packet[scapy.TCP].dport
-        tcp_flags = str(packet[scapy.TCP].flags)
-
+        tcp_flags = get_tcp_flag_description(packet)
     elif packet.haslayer(scapy.UDP):
         protocol = "UDP"
         source_port = packet[scapy.UDP].sport
@@ -74,6 +73,44 @@ def process_packets(packet):
     }
 
     print(f"Packet {counter},\n {packets[counter]} \n")
+
+def get_tcp_flag_description(packet):
+    flags = str(packet[scapy.TCP].flags)
+
+    descriptions = []
+
+    # Check each TCP flag
+    if "S" in flags:
+        descriptions.append("SYN - Initiates a TCP connection")
+
+    if "A" in flags:
+        descriptions.append("ACK - Acknowledges received data")
+
+    if "F" in flags:
+        descriptions.append("FIN - Requests connection termination")
+
+    if "R" in flags:
+        descriptions.append("RST - Resets a connection")
+
+    if "P" in flags:
+        descriptions.append("PSH - Requests prompt delivery of data")
+
+    if "U" in flags:
+        descriptions.append("URG - Indicates urgent data")
+
+    if "E" in flags:
+        descriptions.append("ECE - ECN-related congestion signalling")
+
+    if "C" in flags:
+        descriptions.append("CWR - Congestion Window Reduced")
+
+    if "N" in flags:
+        descriptions.append("NS - ECN Nonce Sum (historical)")
+
+    if not descriptions:
+        return "No TCP flags set"
+
+    return " | ".join(descriptions)
 
 
 def sniff():
