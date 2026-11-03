@@ -1,3 +1,4 @@
+import json
 import scapy.all as scapy
 from datetime import datetime, timezone
 
@@ -72,7 +73,8 @@ def process_packets(packet):
         "Timestamp": timestamp
     }
 
-    print(f"Packet {counter},\n {packets[counter]} \n")
+    #Print as json format
+    print(f"Packet {counter}:\n{json.dumps(packets[counter], indent=4)}\n")
 
 def get_tcp_flag_description(packet):
     flags = str(packet[scapy.TCP].flags)
